@@ -1,0 +1,60 @@
+version: '3'
+
+services:
+    # Loki Container
+    loki_svc:
+        image: grafana/loki:2.9.3
+        ports:
+            - "3100:3100"
+        command: -config.file=/etc/loki/local-config.yaml
+        networks:
+            - overlay
+        restart: unless-stopped
+
+    # Promtail Container
+    promtail_svc:
+        image: grafana/promtail:2.9.3
+        volumes:
+            - './configs/:/var/log'
+        command: -config.file=/etc/promtail/config.yml
+        networks:
+            - overlay
+        restart: unless-stopped
+
+    # Prometheus Container
+    prometheus_svc:
+        image: 'prom/prometheus:v2.49.1'
+        command: '--config.file=/etc/prometheus/prometheus.yml'
+        volumes:
+            - "./configs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
+        ports:
+            - '9090:9090'
+        restart: unless-stopped
+
+    # Grafana Container
+    grafana_svc:
+        image: 'grafana/grafana:10.2.3'
+        environment:
+            - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
+            - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
+            - GF_USERS_ALLOW_SIGN_UP=false
+        ports:
+            - '3000:3000'
+        volumes:
+          - grafana_data:/var/lib/grafana
+        depends_on:
+            - prometheus
+        restart: unless-stopped
+        networks:
+          - overlay
+
+networks:
+  overlay:
+    driver: bridge
+
+volumes:
+  prometheus_data:
+    driver: local
+
+  grafana_data:
+    driver: local

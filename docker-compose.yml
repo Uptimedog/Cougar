@@ -24,7 +24,7 @@ services:
     # Prometheus Container
     prometheus_svc:
         image: prom/prometheus:v2.49.1
-        command: '--config.file=/etc/prometheus/prometheus.yml'
+        command: --config.file=/etc/prometheus/prometheus.yml
         volumes:
             - ./configs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
             - prometheus_data:/prometheus

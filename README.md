@@ -56,7 +56,7 @@ logging {
 
 prometheus.remote_write "local" {
   endpoint {
-    url = "http://127.0.0.1:9090/api/prom/push"
+    url = "http://127.0.0.1:9090/api/v1/write"
   }
 }
 
@@ -65,6 +65,14 @@ prometheus.scrape "linux_node" {
   forward_to = [
     prometheus.remote_write.local.receiver,
   ]
+}
+
+prometheus.scrape "demo" {
+  targets = [
+    // Collect metrics from the default HTTP listen address.
+    {"__address__" = "127.0.0.1:12345"},
+  ]
+  forward_to = [prometheus.remote_write.local.receiver]
 }
 
 prometheus.exporter.unix "node" {

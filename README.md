@@ -26,7 +26,7 @@ $ apt install docker-compose
 $ systemctl enable docker
 ```
 
-2. Run the containers
+2. Run the docker containers.
 
 ```zsh
 $ docker-compose up -d

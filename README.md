@@ -36,7 +36,7 @@ $ docker-compose up -d
 
 [Grafana Agent](https://github.com/grafana/agent) is a vendor-neutral, batteries-included telemetry collector with configuration inspired by Terraform. It is designed to be flexible, performant, and compatible with multiple ecosystems such as Prometheus and OpenTelemetry.
 
-1. To install the agent.
+1. To install the agent in a flow mode.
 
 ```zsh
 $ wget https://github.com/grafana/agent/releases/download/v0.39.1/grafana-agent-flow-0.39.1-1.amd64.deb

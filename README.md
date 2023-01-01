@@ -4,7 +4,7 @@
     <p align="center">Observability and Monitoring LGTM Stack</p>
     <p align="center">
         <a href="https://github.com/Uptimedog/Cougar/releases">
-            <img src="https://img.shields.io/badge/Version-v0.1.0-red.svg">
+            <img src="https://img.shields.io/badge/Version-v0.4.0-red.svg">
         </a>
         <a href="https://github.com/Uptimedog/Cougar/blob/main/LICENSE">
             <img src="https://img.shields.io/badge/LICENSE-MIT-blue.svg">

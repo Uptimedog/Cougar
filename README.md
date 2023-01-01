@@ -33,6 +33,15 @@ $ docker-compose up -d
 ```
 
 
+## Grafana Agent
+
+1. To install the agent.
+
+```zsh
+$
+```
+
+
 ## Versioning
 
 For transparency into our release cycle and in striving to maintain backward compatibility, Cougar is maintained under the [Semantic Versioning guidelines](https://semver.org/) and release process is predictable and business-friendly.

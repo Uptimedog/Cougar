@@ -57,6 +57,11 @@ logging {
 prometheus.remote_write "local" {
   endpoint {
     url = "http://127.0.0.1:9090/api/v1/write"
+
+    basic_auth {
+      username = "admin"
+      password = "password"
+    }
   }
 }
 

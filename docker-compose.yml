@@ -15,6 +15,8 @@ services:
             - "4317:4317"     # otlp grpc
             - "4318:4318"     # otlp http
             - "9411:9411"     # zipkin
+        networks:
+          - overlay
 
     # Prometheus Container
     prometheus_svc:
@@ -28,8 +30,6 @@ services:
             - prometheus_data:/prometheus
         ports:
             - 9090:9090
-        depends_on:
-            - tempo_svc
         restart: unless-stopped
         networks:
           - overlay
@@ -47,8 +47,26 @@ services:
           - ./configs/grafana/grafana.ini:/etc/grafana/grafana.ini
           - grafana_data:/var/lib/grafana
           - grafana_logs:/var/log/grafana
-        depends_on:
-            - prometheus_svc
+        restart: unless-stopped
+        networks:
+          - overlay
+
+    # Loki Container
+    loki_svc:
+        image: grafana/loki:2.9.3
+        ports:
+            - 3100:3100
+        command: -config.file=/etc/loki/local-config.yaml
+        restart: unless-stopped
+        networks:
+          - overlay
+
+    # Promtail Container
+    promtail_svc:
+        image: grafana/promtail:2.9.3
+        volumes:
+            - './var/logs/:/var/log'
+        command: -config.file=/etc/promtail/config.yml
         restart: unless-stopped
         networks:
           - overlay

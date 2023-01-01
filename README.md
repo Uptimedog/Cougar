@@ -13,6 +13,26 @@
 </p>
 
 
+## Usage
+
+1. Install docker and docker-compose.
+
+```zsh
+$ apt-get update
+$ apt-get upgrade -y
+
+$ apt install docker.io
+$ apt install docker-compose
+$ systemctl enable docker
+```
+
+2. Run the containers
+
+```zsh
+$ docker-compose up -d
+```
+
+
 ## Versioning
 
 For transparency into our release cycle and in striving to maintain backward compatibility, Cougar is maintained under the [Semantic Versioning guidelines](https://semver.org/) and release process is predictable and business-friendly.

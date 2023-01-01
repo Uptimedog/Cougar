@@ -39,7 +39,44 @@ $ docker-compose up -d
 1. To install the agent.
 
 ```zsh
-$
+$ wget https://github.com/grafana/agent/releases/download/v0.39.1/grafana-agent-flow-0.39.1-1.amd64.deb
+$ dpkg -i grafana-agent-flow-0.39.1-1.amd64.deb
+```
+
+2. Update config file
+
+```zsh
+$ vim /etc/grafana-agent-flow.river
+```
+
+```hcl
+logging {
+    level = "debug"
+}
+
+prometheus.remote_write "local" {
+  endpoint {
+    url = "http://127.0.0.1:9090/api/prom/push"
+  }
+}
+
+prometheus.scrape "linux_node" {
+  targets = prometheus.exporter.unix.node.targets
+  forward_to = [
+    prometheus.remote_write.local.receiver,
+  ]
+}
+
+prometheus.exporter.unix "node" {
+
+}
+```
+
+3. Start the grafana agent service
+
+```zsh
+$ systemctl start grafana-agent-flow
+$ systemctl status grafana-agent-flow
 ```
 
 

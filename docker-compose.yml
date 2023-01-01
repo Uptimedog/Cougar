@@ -1,15 +1,35 @@
 version: '3'
 
 services:
+    # Tempo Container
+    tempo_svc:
+        image: grafana/tempo:2.3.1
+        command: [ "-config.file=/etc/tempo.yaml" ]
+        volumes:
+            - ./configs/tempo/tempo.yaml:/etc/tempo.yaml
+            - tempo_data:/tmp/tempo
+        ports:
+            - "14268:14268"   # jaeger ingest
+            - "3200:3200"     # tempo
+            - "9095:9095"     # tempo grpc
+            - "4317:4317"     # otlp grpc
+            - "4318:4318"     # otlp http
+            - "9411:9411"     # zipkin
+
     # Prometheus Container
     prometheus_svc:
         image: prom/prometheus:v2.49.1
-        command: --config.file=/etc/prometheus/prometheus.yml
+        command:
+          - --config.file=/etc/prometheus/prometheus.yml
+          - --web.enable-remote-write-receiver
+          - --enable-feature=exemplar-storage
         volumes:
             - ./configs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
             - prometheus_data:/prometheus
         ports:
             - 9090:9090
+        depends_on:
+            - tempo_svc
         restart: unless-stopped
         networks:
           - overlay
@@ -45,4 +65,7 @@ volumes:
     driver: local
 
   grafana_logs:
+    driver: local
+
+  tempo_data:
     driver: local

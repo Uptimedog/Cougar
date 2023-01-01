@@ -1,15 +1,15 @@
 # my global config
 global:
-  evaluation_interval: 15s
+  scrape_interval:     15s
   external_labels:
     monitor: cougar-monitor
-  scrape_interval: 15s
+  evaluation_interval: 15s
+
 rule_files: ~
 scrape_configs:
-  -
-    job_name: prometheus
-    scrape_interval: 5s
+  - job_name: 'prometheus'
     static_configs:
-      -
-        targets:
-          - "localhost:9090"
+      - targets: [ 'localhost:9090' ]
+  - job_name: 'tempo'
+    static_configs:
+      - targets: [ 'tempo_svc:3200' ]

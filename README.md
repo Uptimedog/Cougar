@@ -21,8 +21,7 @@
 $ apt-get update
 $ apt-get upgrade -y
 
-$ apt install docker.io
-$ apt install docker-compose
+$ apt install docker.io docker-compose -y
 $ systemctl enable docker
 ```
 

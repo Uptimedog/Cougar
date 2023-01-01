@@ -1,5 +1,5 @@
 <p align="center">
-    <img alt="Cougar Logo" src="/static/logo.png?v=0.1.0" height="120" />
+    <img alt="Cougar Logo" src="/static/logo.png?v=0.1.0" height="200" />
     <h3 align="center">Cougar</h3>
     <p align="center">Observability and Monitoring Stack.</p>
     <p align="center">

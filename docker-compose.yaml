@@ -70,6 +70,17 @@ services:
             - 4040:4040
         restart: unless-stopped
 
+    # Alertmanager Container
+    alertmanager_svc:
+        image: prom/alertmanager:v0.26.0
+        command: --config.file=/config/alertmanager.yml --log.level=debug
+        ports:
+          - 9093:9093
+        volumes:
+          - ./configs/alertmanager/alertmanager.yml:/config/alertmanager.yml"
+          - alertmanager_data:/data
+        restart: unless-stopped
+
 volumes:
   prometheus_data:
     driver: local
@@ -81,4 +92,7 @@ volumes:
     driver: local
 
   tempo_data:
+    driver: local
+
+  alertmanager_data:
     driver: local

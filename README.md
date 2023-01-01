@@ -88,6 +88,15 @@ $ systemctl status grafana-agent-flow
 ```
 
 
+### Deploying Badger
+
+[Badger](https://github.com/Uptimedog/Badger) is a microservice that can be used for testing the LGTM stack. To deploy badger, do the following
+
+```zsh
+$
+```
+
+
 ### Versioning
 
 For transparency into our release cycle and in striving to maintain backward compatibility, Cougar is maintained under the [Semantic Versioning guidelines](https://semver.org/) and release process is predictable and business-friendly.

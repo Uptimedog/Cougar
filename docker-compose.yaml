@@ -15,6 +15,7 @@ services:
             - 4317:4317      # otlp grpc
             - 4318:4318      # otlp http
             - 9411:9411      # zipkin
+        network_mode: host
 
     # Prometheus Container
     prometheus_svc:
@@ -30,6 +31,7 @@ services:
         ports:
             - 9090:9090
         restart: unless-stopped
+        network_mode: host
 
     # Grafana Container
     grafana_svc:
@@ -46,6 +48,7 @@ services:
         ports:
             - 3000:3000
         restart: unless-stopped
+        network_mode: host
 
     # Loki Container
     loki_svc:
@@ -54,6 +57,7 @@ services:
         ports:
             - 3100:3100
         restart: unless-stopped
+        network_mode: host
 
     # Promtail Container
     promtail_svc:
@@ -62,6 +66,7 @@ services:
         volumes:
             - ./var/logs/:/var/log
         restart: unless-stopped
+        network_mode: host
 
     # Pyroscope Container
     pyroscope_svc:
@@ -69,6 +74,7 @@ services:
         ports:
             - 4040:4040
         restart: unless-stopped
+        network_mode: host
 
     # Alertmanager Container
     alertmanager_svc:
@@ -80,6 +86,7 @@ services:
           - ./configs/alertmanager/alertmanager.yml:/config/alertmanager.yml"
           - alertmanager_data:/data
         restart: unless-stopped
+        network_mode: host
 
 volumes:
   prometheus_data:

@@ -73,7 +73,7 @@ services:
     # Alertmanager Container
     alertmanager_svc:
         image: prom/alertmanager:v0.27.0
-        command: --config.file=/config/alertmanager.yml --log.level=debug
+        command: --config.file=/config/alertmanager/alertmanager.yml --log.level=debug
         ports:
           - 9093:9093
         volumes:

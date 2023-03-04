@@ -31,7 +31,7 @@ $ systemctl enable docker
 $ docker-compose up -d
 ```
 
-### Alloy
+### Grafana Alloy
 
 To install and run alloy on hosts
 

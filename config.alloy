@@ -1,5 +1,6 @@
 logging {
   level  = "debug"
+  format = "json"
 }
 
 prometheus.remote_write "default" {

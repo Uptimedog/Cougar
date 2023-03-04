@@ -20,10 +20,10 @@ services:
     prometheus_svc:
         image: prom/prometheus:v2.51.2
         command:
-          - --config.file=/etc/prometheus/prometheus.yml
-          - --web.enable-remote-write-receiver
-          - --enable-feature=exemplar-storage
-          - --storage.tsdb.path=/prometheus
+            - --config.file=/etc/prometheus/prometheus.yml
+            - --web.enable-remote-write-receiver
+            - --enable-feature=exemplar-storage
+            - --storage.tsdb.path=/prometheus
         volumes:
             - ./configs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
             - prometheus_data:/prometheus
@@ -50,7 +50,8 @@ services:
     # Loki Container
     loki_svc:
         image: grafana/loki:3.0.0
-        command: -config.file=/etc/loki/local-config.yaml
+        command:
+            - -config.file=/etc/loki/local-config.yaml
         ports:
             - 3100:3100
         restart: unless-stopped
@@ -66,13 +67,13 @@ services:
     alertmanager_svc:
         image: prom/alertmanager:v0.27.0
         command:
-          - --config.file=/config/alertmanager.yml
-          - --log.level=debug
+            - --config.file=/etc/alertmanager/alertmanager.yml
+            - --log.level=debug
         ports:
-          - 9093:9093
+            - 9093:9093
         volumes:
-          - ./configs/alertmanager/alertmanager.yml:/config/alertmanager.yml"
-          - alertmanager_data:/data
+            - ./configs/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml"
+            - alertmanager_data:/data
         restart: unless-stopped
 
 volumes:

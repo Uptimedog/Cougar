@@ -31,6 +31,20 @@ $ systemctl enable docker
 $ docker-compose up -d
 ```
 
+### Alloy
+
+To install and run alloy on hosts
+
+```zsh
+$ wget https://github.com/grafana/alloy/releases/download/v1.0.0/alloy-linux-amd64.zip
+$ unzip alloy-linux-amd64.zip
+
+$ export PROM_URL=http://X.X.X.X:9090/api/v1/write
+$ export PROM_USERNAME=admin
+$ export PROM_PASSWORD=password
+$ alloy-linux-amd64 run config.alloy
+```
+
 
 ### Deploying Badger
 

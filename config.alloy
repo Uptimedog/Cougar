@@ -1,0 +1,22 @@
+logging {
+  level  = "debug"
+}
+
+prometheus.remote_write "default" {
+  endpoint {
+    url = env("PROM_URL")
+
+    basic_auth {
+      username = env("PROM_USERNAME")
+      password = env("PROM_PASSWORD")
+    }
+  }
+}
+
+prometheus.scrape "agent" {
+  targets = [{
+    __address__ = "127.0.0.1:12345",
+  }]
+
+  forward_to = [prometheus.remote_write.default.receiver]
+}

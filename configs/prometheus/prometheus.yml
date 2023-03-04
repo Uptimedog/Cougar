@@ -17,6 +17,7 @@ scrape_configs:
 
 # change to different values
 remote_write:
-  basic_auth:
-    username: admin
-    password: password
+  - url: "https://localhost:9090/api/v1/write"
+    basic_auth:
+      username: "admin"
+      password: "password"

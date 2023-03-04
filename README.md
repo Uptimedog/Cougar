@@ -31,16 +31,6 @@ $ systemctl enable docker
 $ docker-compose up -d
 ```
 
-3. To install Node Exporter.
-
-```zsh
-# For Linux VM
-$ ./node_exporter/linux_amd64
-
-# For Linux RPI
-$ ./node_exporter/linux_arm64
-```
-
 
 ### Deploying Badger
 

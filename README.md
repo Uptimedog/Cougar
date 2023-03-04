@@ -31,84 +31,14 @@ $ systemctl enable docker
 $ docker-compose up -d
 ```
 
-
-### Grafana Agent
-
-[Grafana Agent](https://github.com/grafana/agent) is a vendor-neutral, batteries-included telemetry collector with configuration inspired by Terraform. It is designed to be flexible, performant, and compatible with multiple ecosystems such as Prometheus and OpenTelemetry.
-
-1. To install the agent in a flow mode.
+3. To install Node Exporter.
 
 ```zsh
-$ wget https://github.com/grafana/agent/releases/download/v0.39.1/grafana-agent-flow-0.39.1-1.amd64.deb
-$ dpkg -i grafana-agent-flow-0.39.1-1.amd64.deb
-```
+# For Linux VM
+$ ./node_exporter/linux_amd64
 
-2. Update config file
-
-```zsh
-$ vim /etc/grafana-agent-flow.river
-```
-
-```hcl
-logging {
-    level = "debug"
-}
-
-prometheus.remote_write "default" {
-  endpoint {
-    url = "http://127.0.0.1:9090/api/v1/write"
-
-    basic_auth {
-      username = "admin"
-      password = "password"
-    }
-  }
-}
-
-prometheus.scrape "linux_node" {
-  scrape_interval = "15s"
-  targets = prometheus.exporter.unix.node.targets
-  forward_to = [
-    prometheus.remote_write.default.receiver,
-  ]
-  metrics_path = "/metrics"
-}
-
-prometheus.scrape "agent" {
-  targets = [
-    {"__address__" = "127.0.0.1:12345"},
-  ]
-  forward_to = [
-    prometheus.remote_write.default.receiver
-  ]
-}
-
-prometheus.exporter.unix "node" {
-  set_collectors = [
-    "vmstat",
-    "filesystem",
-    "cpu",
-    "uname",
-    "diskstats",
-    "loadavg",
-    "meminfo",
-    "netstat",
-  ]
-  enable_collectors = [
-    "processes",
-    "systemd",
-  ]
-  include_exporter_metrics = true
-}
-```
-
-The above [configurations are shared on this link](https://grafana.github.io/agent-configurator/?c=Ly8gV2VsY29tZSB0byB0aGUgR3JhZmFuYSBBZ2VudCBDb25maWd1cmF0b3IhCi8vIFlvdSBjYW4gcGFzdGUgeW91ciBjb25maWd1cmF0aW9uIGhlcmUgb3Igc3RhcnQgYnkgdXNpbmcgdGhlIGNvbmZpZ3VyYXRpb24gd2l6YXJkIG9yIGJ5IGxvYWRpbmcgYW4gZXhhbXBsZSBmcm9tIHRoZSBjYXRhbG9nLgoKbG9nZ2luZyB7CiAgICBsZXZlbCA9ICJkZWJ1ZyIKfQoKcHJvbWV0aGV1cy5yZW1vdGVfd3JpdGUgImRlZmF1bHQiIHsKICBlbmRwb2ludCB7CiAgICB1cmwgPSAiaHR0cDovLzEyNy4wLjAuMTo5MDkwL2FwaS92MS93cml0ZSIKCiAgICBiYXNpY19hdXRoIHsKICAgICAgdXNlcm5hbWUgPSAiYWRtaW4iCiAgICAgIHBhc3N3b3JkID0gInBhc3N3b3JkIgogICAgfQogIH0KfQoKcHJvbWV0aGV1cy5zY3JhcGUgImxpbnV4X25vZGUiIHsKICBzY3JhcGVfaW50ZXJ2YWwgPSAiMTVzIgogIHRhcmdldHMgPSBwcm9tZXRoZXVzLmV4cG9ydGVyLnVuaXgubm9kZS50YXJnZXRzCiAgZm9yd2FyZF90byA9IFsKICAgIHByb21ldGhldXMucmVtb3RlX3dyaXRlLmRlZmF1bHQucmVjZWl2ZXIsCiAgXQogIG1ldHJpY3NfcGF0aCA9ICIvbWV0cmljcyIKfQoKcHJvbWV0aGV1cy5zY3JhcGUgImFnZW50IiB7CiAgdGFyZ2V0cyA9IFsKICAgIHsiX19hZGRyZXNzX18iID0gIjEyNy4wLjAuMToxMjM0NSJ9LAogIF0KICBmb3J3YXJkX3RvID0gWwogICAgcHJvbWV0aGV1cy5yZW1vdGVfd3JpdGUuZGVmYXVsdC5yZWNlaXZlcgogIF0KfQoKcHJvbWV0aGV1cy5leHBvcnRlci51bml4ICJub2RlIiB7CiAgc2V0X2NvbGxlY3RvcnMgPSBbCiAgICAidm1zdGF0IiwKICAgICJmaWxlc3lzdGVtIiwKICAgICJjcHUiLAogICAgInVuYW1lIiwKICAgICJkaXNrc3RhdHMiLAogICAgImxvYWRhdmciLAogICAgIm1lbWluZm8iLAogICAgIm5ldHN0YXQiLAogIF0KICBlbmFibGVfY29sbGVjdG9ycyA9IFsKICAgICJwcm9jZXNzZXMiLAogICAgInN5c3RlbWQiLAogIF0KICBpbmNsdWRlX2V4cG9ydGVyX21ldHJpY3MgPSB0cnVlCn0=)
-
-3. Start the grafana agent service
-
-```zsh
-$ systemctl start grafana-agent-flow
-$ systemctl status grafana-agent-flow
+# For Linux RPI
+$ ./node_exporter/linux_arm64
 ```
 
 

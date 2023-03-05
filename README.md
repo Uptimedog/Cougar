@@ -33,16 +33,18 @@ $ docker-compose up -d
 
 ### Grafana Alloy
 
-To install and run alloy on hosts
+To install and run `alloy` on hosts
 
 ```zsh
 $ wget https://github.com/grafana/alloy/releases/download/v1.0.0/alloy-linux-amd64.zip
 $ unzip alloy-linux-amd64.zip
+$ mv alloy-linux-amd64 alloy
 
-$ export PROM_URL=http://X.X.X.X:9090/api/v1/write
-$ export PROM_USERNAME=admin
-$ export PROM_PASSWORD=password
-$ alloy-linux-amd64 run config.alloy
+$ export PROMETHEUS_URL=http://X.X.X.X:9090/api/v1/write
+$ export PROMETHEUS_USERNAME=admin
+$ export PROMETHEUS_PASSWORD=password
+
+$ ./alloy run config.alloy
 ```
 
 

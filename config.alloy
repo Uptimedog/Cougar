@@ -5,11 +5,11 @@ logging {
 
 prometheus.remote_write "default" {
   endpoint {
-    url = env("PROM_URL")
+    url = env("PROMETHEUS_URL")
 
     basic_auth {
-      username = env("PROM_USERNAME")
-      password = env("PROM_PASSWORD")
+      username = env("PROMETHEUS_USERNAME")
+      password = env("PROMETHEUS_PASSWORD")
     }
   }
 }

@@ -4,7 +4,8 @@ services:
     # Tempo Container
     tempo:
         image: grafana/tempo:2.5.0
-        command: [ "-config.file=/etc/tempo.yaml" ]
+        command:
+            - -config.file=/etc/tempo.yaml
         volumes:
             - ./configs/tempo/tempo.yaml:/etc/tempo.yaml
             - tempo_data:/tmp/tempo
@@ -24,8 +25,8 @@ services:
             - --web.enable-remote-write-receiver
             - --enable-feature=exemplar-storage
             - --storage.tsdb.path=/prometheus
-            - '--web.external-url=/prometheus/'
-            - '--web.route-prefix=/prometheus/'
+            - --web.external-url=/
+            - --web.route-prefix=/
         volumes:
             - ./configs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
             - prometheus_data:/prometheus
@@ -59,11 +60,11 @@ services:
         restart: unless-stopped
 
     # Pyroscope Container
-    pyroscope:
-        image: grafana/pyroscope:1.6.0
-        ports:
-            - 4040:4040
-        restart: unless-stopped
+    # pyroscope:
+    #     image: grafana/pyroscope:1.6.0
+    #     ports:
+    #         - 4040:4040
+    #     restart: unless-stopped
 
     # Alertmanager Container
     alertmanager:

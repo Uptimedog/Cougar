@@ -36,16 +36,44 @@ $ docker-compose up -d
 To install and run `alloy` on hosts
 
 ```zsh
+$ mkdir -p /opt/alloy
+$ cd /tmp
 $ wget https://github.com/grafana/alloy/releases/download/v1.0.0/alloy-linux-amd64.zip
 $ unzip alloy-linux-amd64.zip
-$ mv alloy-linux-amd64 alloy
 
-$ export REMOTE_LOKI_WRITE_URL=http://X.X.X.X:3100/loki/api/v1/push
-$ export REMOTE_PROMETHEUS_WRITE_URL=http://X.X.X.X:9090/api/v1/write
-$ export REMOTE_PROMETHEUS_USERNAME=admin
-$ export REMOTE_PROMETHEUS_PASSWORD=password
+$ mv alloy-linux-amd64 /opt/alloy/agent
 
-$ ./alloy run config.alloy
+$ groupadd -f alloy
+$ useradd -g alloy --no-create-home --shell /bin/false alloy
+
+```
+
+Create `/opt/alloy/config.alloy` from `config.alloy` in this repo. Then run alloy as a systemd service.
+
+```zsh
+$ echo "[Unit]
+Description=Node Exporter
+Documentation=https://prometheus.io/docs/guides/node-exporter/
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=alloy
+Group=alloy
+Type=simple
+Restart=on-failure
+Environment="REMOTE_LOKI_WRITE_URL=http://X.X.X.X:3100/loki/api/v1/push"
+Environment="REMOTE_PROMETHEUS_WRITE_URL=http://X.X.X.X:9090/api/v1/write"
+Environment="REMOTE_PROMETHEUS_USERNAME=admin"
+Environment="REMOTE_PROMETHEUS_PASSWORD=password"
+ExecStart=/opt/alloy/agent run /opt/alloy/config.alloy
+
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/alloy.service
+
+$ systemctl daemon-reload
+$ systemctl enable alloy.service
+$ systemctl start alloy.service
 ```
 
 

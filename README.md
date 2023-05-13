@@ -37,8 +37,10 @@ To install and run `alloy` on hosts
 
 ```zsh
 $ mkdir -p /opt/alloy
+$ mkdir -p /var/lib/alloy
+
 $ cd /tmp
-$ wget https://github.com/grafana/alloy/releases/download/v1.0.0/alloy-linux-amd64.zip
+$ wget https://github.com/grafana/alloy/releases/download/v1.1.1/alloy-linux-amd64.zip
 $ unzip alloy-linux-amd64.zip
 
 $ mv alloy-linux-amd64 /opt/alloy/agent
@@ -46,14 +48,16 @@ $ mv alloy-linux-amd64 /opt/alloy/agent
 $ groupadd -f alloy
 $ useradd -g alloy --no-create-home --shell /bin/false alloy
 
+$ chown -R alloy:alloy /opt/alloy
+$ chown -R alloy:alloy /var/lib/alloy
 ```
 
 Create `/opt/alloy/config.alloy` from `config.alloy` in this repo. Then run alloy as a systemd service.
 
 ```zsh
 $ echo "[Unit]
-Description=Node Exporter
-Documentation=https://prometheus.io/docs/guides/node-exporter/
+Description=Alloy
+Documentation=https://github.com/grafana/alloy
 Wants=network-online.target
 After=network-online.target
 
@@ -66,7 +70,7 @@ Environment="REMOTE_LOKI_WRITE_URL=http://X.X.X.X:3100/loki/api/v1/push"
 Environment="REMOTE_PROMETHEUS_WRITE_URL=http://X.X.X.X:9090/api/v1/write"
 Environment="REMOTE_PROMETHEUS_USERNAME=admin"
 Environment="REMOTE_PROMETHEUS_PASSWORD=password"
-ExecStart=/opt/alloy/agent run /opt/alloy/config.alloy
+ExecStart=/opt/alloy/agent run --storage.path=/var/lib/alloy /opt/alloy/config.alloy
 
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/alloy.service

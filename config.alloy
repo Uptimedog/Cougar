@@ -1,23 +1,40 @@
-logging {
-  level  = "debug"
-  format = "json"
+// Remote Loki Server
+loki.write "remote_loki" {
+  endpoint {
+    url = env("REMOTE_LOKI_WRITE_URL")
+  }
 }
 
-prometheus.remote_write "default" {
+// Remote Prometheus Server
+prometheus.remote_write "remote_prometheus" {
   endpoint {
-    url = env("PROMETHEUS_URL")
+    url = env("REMOTE_PROMETHEUS_WRITE_URL")
 
     basic_auth {
-      username = env("PROMETHEUS_USERNAME")
-      password = env("PROMETHEUS_PASSWORD")
+      username = env("REMOTE_PROMETHEUS_USERNAME")
+      password = env("REMOTE_PROMETHEUS_PASSWORD")
     }
   }
 }
 
-prometheus.scrape "agent" {
-  targets = [{
-    __address__ = "127.0.0.1:12345",
-  }]
+// Send Agent Logs to Loki
+logging {
+  level = "info"
+  write_to = [loki.write.remote_loki.receiver]
+}
 
-  forward_to = [prometheus.remote_write.default.receiver]
+// Collect metrics from the local running Alloy instance and forward to
+// Prometheus.
+prometheus.exporter.self "home_rpi_alloy" {}
+prometheus.scrape "home_rpi_alloy" {
+  targets    = prometheus.exporter.self.home_rpi_alloy.targets
+
+  forward_to = [prometheus.remote_write.remote_prometheus.receiver]
+}
+
+loki.source.file "badger_logs" {
+  targets    = [
+    {__path__ = "/var/logs/badger.log", "color" = "pink", "service_name" = "badger", "component" = "backend"},
+  ]
+  forward_to = [loki.write.remote_loki.receiver]
 }

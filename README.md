@@ -40,20 +40,12 @@ $ wget https://github.com/grafana/alloy/releases/download/v1.0.0/alloy-linux-amd
 $ unzip alloy-linux-amd64.zip
 $ mv alloy-linux-amd64 alloy
 
-$ export PROMETHEUS_URL=http://X.X.X.X:9090/api/v1/write
-$ export PROMETHEUS_USERNAME=admin
-$ export PROMETHEUS_PASSWORD=password
+$ export REMOTE_LOKI_WRITE_URL=http://X.X.X.X:3100/loki/api/v1/push
+$ export REMOTE_PROMETHEUS_WRITE_URL=http://X.X.X.X:9090/api/v1/write
+$ export REMOTE_PROMETHEUS_USERNAME=admin
+$ export REMOTE_PROMETHEUS_PASSWORD=password
 
 $ ./alloy run config.alloy
-```
-
-
-### Deploying Badger
-
-[Badger](https://github.com/Uptimedog/Badger) is a microservice that can be used for testing the LGTM stack. To deploy badger, do the following
-
-```zsh
-$
 ```
 
 

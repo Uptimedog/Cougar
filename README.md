@@ -57,6 +57,78 @@ $
 ```
 
 
+### Raspberry PI
+
+To run the complete LGTM stack on RPI and expose it to outside world, You can use ngrok
+
+
+```zsh
+$ curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc \
+    | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null \
+    && echo "deb https://ngrok-agent.s3.amazonaws.com buster main" \
+    | sudo tee /etc/apt/sources.list.d/ngrok.list \
+    && sudo apt update \
+    && sudo apt install ngrok
+
+$ ngrok config add-authtoken xxxxxxxxxxxxxxxxx
+```
+
+Adjust config file to expose all ports
+
+```yaml
+version: "2"
+authtoken: xxxxxxxxxxxxxxxxx
+tunnels:
+  grafana:
+    proto: http
+    addr: 3000
+  prometheus:
+    proto: http
+    addr: 9090
+  loki:
+    proto: http
+    addr: 3100
+  pyroscope:
+    proto: http
+    addr: 4040
+  alertmanager:
+    proto: http
+    addr: 9093
+```
+
+The run ngrok. by the way free plan allow only 3 ports.
+
+```zsh
+$ ngrok start --all
+```
+
+Create a systemd service file `/etc/systemd/system/ngrok.service`.
+
+```
+[Unit]
+Description=ngrok
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+Restart=on-failure
+ExecStart=/usr/local/bin/ngrok start --all --config /root/.config/ngrok/ngrok.yml
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Enable and start the systemd service
+
+```zsh
+$ systemctl daemon-reload
+$ systemctl enable ngrok.service
+$ systemctl start ngrok.service
+$ systemctl status ngrok.service
+```
+
+
 ### Versioning
 
 For transparency into our release cycle and in striving to maintain backward compatibility, Cougar is maintained under the [Semantic Versioning guidelines](https://semver.org/) and release process is predictable and business-friendly.

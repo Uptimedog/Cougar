@@ -1,7 +1,7 @@
 <p align="center">
     <img alt="Cougar Logo" src="/static/logo.png?v=0.8.0" height="200" />
     <h3 align="center">Cougar</h3>
-    <p align="center">Observability and Monitoring LGTM Stack</p>
+    <p align="center">LGTM Stack Playground</p>
     <p align="center">
         <a href="https://github.com/Uptimedog/Cougar/releases">
             <img src="https://img.shields.io/badge/Version-v0.8.0-red.svg">

@@ -2,19 +2,19 @@ version: '3.8'
 
 services:
     # Tempo Container
-    # tempo:
-    #     image: grafana/tempo:2.4.1
-    #     command: [ "-config.file=/etc/tempo.yaml" ]
-    #     volumes:
-    #         - ./configs/tempo/tempo.yaml:/etc/tempo.yaml
-    #         - tempo_data:/tmp/tempo
-    #     ports:
-    #         - 14268:14268    # jaeger ingest
-    #         - 3200:3200      # tempo
-    #         - 9095:9095      # tempo grpc
-    #         - 4317:4317      # otlp grpc
-    #         - 4318:4318      # otlp http
-    #         - 9411:9411      # zipkin
+    tempo:
+        image: grafana/tempo:2.4.1
+        command: [ "-config.file=/etc/tempo.yaml" ]
+        volumes:
+            - ./configs/tempo/tempo.yaml:/etc/tempo.yaml
+            - tempo_data:/tmp/tempo
+        ports:
+            - 14268:14268    # jaeger ingest
+            - 3200:3200      # tempo
+            - 9095:9095      # tempo grpc
+            - 4317:4317      # otlp grpc
+            - 4318:4318      # otlp http
+            - 9411:9411      # zipkin
 
     # Prometheus Container
     prometheus:
@@ -24,11 +24,13 @@ services:
             - --web.enable-remote-write-receiver
             - --enable-feature=exemplar-storage
             - --storage.tsdb.path=/prometheus
+            - '--web.external-url=/prometheus/'
+            - '--web.route-prefix=/prometheus/'
         volumes:
             - ./configs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
             - prometheus_data:/prometheus
         ports:
-            - 9090
+            - 9090:9090
         restart: unless-stopped
 
     # Grafana Container
@@ -44,7 +46,7 @@ services:
           - grafana_data:/var/lib/grafana
           - grafana_logs:/var/log/grafana
         ports:
-            - 3000
+            - 3000:3000
         restart: unless-stopped
 
     # Loki Container
@@ -53,14 +55,14 @@ services:
         command:
             - -config.file=/etc/loki/local-config.yaml
         ports:
-            - 3100
+            - 3100:3100
         restart: unless-stopped
 
     # Pyroscope Container
     pyroscope:
         image: grafana/pyroscope:1.5.0
         ports:
-            - 4040
+            - 4040:4040
         restart: unless-stopped
 
     # Alertmanager Container
@@ -70,33 +72,24 @@ services:
             - --config.file=/etc/alertmanager/alertmanager.yml
             - --log.level=debug
         ports:
-            - 9093
+            - 9093:9093
         volumes:
             - ./configs/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml"
             - alertmanager_data:/data
         restart: unless-stopped
 
-    # Nginx Container
-    nginx:
-        image: nginx:1.25.4-alpine3.18
-        ports:
-            - 80:80
-        volumes:
-            - ./configs/nginx/nginx.conf:/etc/nginx/nginx.conf
-        restart: unless-stopped
-
 volumes:
-  prometheus_data:
-    driver: local
+    prometheus_data:
+        driver: local
 
-  grafana_data:
-    driver: local
+    grafana_data:
+        driver: local
 
-  grafana_logs:
-    driver: local
+    grafana_logs:
+        driver: local
 
-#  tempo_data:
-#    driver: local
+    tempo_data:
+        driver: local
 
-  alertmanager_data:
-    driver: local
+    alertmanager_data:
+        driver: local

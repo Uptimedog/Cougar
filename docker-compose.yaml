@@ -33,7 +33,7 @@ services:
 
     # Grafana Container
     grafana_svc:
-        image: grafana/grafana:10.3.3
+        image: grafana/grafana:10.4.2
         environment:
             - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
             - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
